@@ -1,13 +1,46 @@
-// ref:
-// - https://umijs.org/plugin/develop.html
-import { IApi } from 'umi-types';
+import { IApi } from "umi-types";
 
-export default function (api: IApi, options) {
+interface External {
+  name: string;
+  var: string;
+  script?: object;
+  template?: string;
+  params?: object;
+}
 
-  // Example: output the webpack config
-  api.chainWebpackConfig(config => {
-    // console.log(config.toString());
-  });
+interface Options {
+  externals: External[];
+  script?: object;
+  template?: string;
+  params?: object;
+}
 
+export default function(api: IApi, options: Options) {
+  if (options && Array.isArray(options.externals)) {
+    api.chainWebpackConfig(memo => {
+      options.externals.forEach(item => {
+        memo.externals[item.name] = item.var;
+      });
 
+      return memo;
+    });
+
+    options.externals.map(item => {
+      const params = { ...options.params, ...item.params, name: item.name };
+      const template = item.template || options.template || "/${name}.js";
+
+      api.addHTMLHeadScript({
+        ...options.script,
+        ...item.script,
+        src: render(template, params)
+      });
+    });
+  }
+}
+
+function render(template: string, context: object) {
+  return template.replace(
+    /\$\{(.*?)\}/g,
+    (match, key) => context[key.trim()] || key
+  );
 }
