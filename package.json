@@ -1,0 +1,33 @@
+{
+  "name": "umi-plugin-replace-cdn",
+  "version": "0.0.1",
+  "description": "umijs",
+  "authors": {
+    "name": "bluexiaowei",
+    "email": "bluexiaowei@aliyun.com"
+  },
+  "repository": "https://github.com/bluexiaowei/umi-plugin-replace-cdn.git/replace-cdn",
+  "peerDependencies": {
+    "umi": "2.x || ^2.9.0-0"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "cross-env APP_ROOT=$PWD/example umi dev",
+    "build": "father-build",
+    "prepublishOnly": "npm run build && np --no-cleanup --yolo --no-publish"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "father-build": "^1.8.0",
+    "np": "^5.0.3",
+    "umi": "^2.9.0",
+    "umi-types": "^0.4.0-beta.4"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "src",
+    "ui"
+  ],
+  "license": "MIT"
+}
